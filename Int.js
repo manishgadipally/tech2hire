@@ -5,15 +5,20 @@ function search() {
   var table = document.getElementById("myTable");
   var tr = table.getElementsByTagName("tr");
   for (var i = 0; i < tr.length; i++) {
-    var td = tr[i].getElementsByTagName("td")[0];
-    if (td) {
-      var txtValue = td.textContent || td.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
+    for (var j = 0; j < tr[i].cells.length; j++) {
+      var td = tr[i].getElementsByTagName("td")[j];
+      if (td) {
+        var txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+          break;
+        } else {
+          tr[i].style.display = "none";
+        }
       }
+
     }
+
   }
 }
 
@@ -72,28 +77,34 @@ function sortTable(n) {
 var table = document.getElementById("myTable");
 if (table != null) {
   for (var i = 1; i < table.rows.length; i++) {
-    for (var j = 0; j < table.rows[i].cells.length; j++)
-      table.rows[i].cells[j].onclick = function() {
-        tableText(this);
-      };
+    for (var j = 0; j < table.rows[i].cells.length; j++) {
+      var pinImg = table.rows[i].cells[j].getElementsByTagName("img")[0];
+      if (pinImg) {
+        pinImg.onclick = function () {
+          tableText(this.parentNode);
+        }
+      }
+    };
   }
 }
+
 function tableText(tableCell) {
-  if (tableCell.cellIndex == 6) {
-    var row = tableCell.parentNode;
-    if (!row.className.includes("pinned")) {
-      var table = tableCell.parentNode.parentNode;
-      var df = table.insertRow(1);
-      df.innerHTML = row.innerHTML;
-      df.className = df.className + "pinned";
-      for (var f = 0; f < df.cells.length; f++) {
-        df.cells[f].onclick = function(e) {
-          tableText(this);
+  var row = tableCell.parentNode;
+  if (!row.className.includes("pinned")) {
+    var table = tableCell.parentNode.parentNode;
+    var df = table.insertRow(1);
+    df.innerHTML = row.innerHTML;
+    df.className = df.className + "pinned";
+    table.deleteRow(row.rowIndex);
+    for (var f = 0; f < df.cells.length; f++) {
+      var pinImg = df.cells[f].getElementsByTagName("img")[0];
+      if (pinImg) {
+        pinImg.onclick = function (e) {
+          tableText(this.parentNode);
         };
       }
-      table.deleteRow(row.rowIndex);
-    } else {
-      row.classList.remove("pinned");
     }
+  } else {
+    row.classList.remove("pinned");
   }
 }
