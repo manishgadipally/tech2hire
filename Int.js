@@ -4,6 +4,7 @@ function search() {
   var filter = input.value.toUpperCase();
   var table = document.getElementById("myTable");
   var tr = table.getElementsByTagName("tr");
+  sleep(3);
   for (var i = 0; i < tr.length; i++) {
     for (var j = 0; j < tr[i].cells.length; j++) {
       var td = tr[i].getElementsByTagName("td")[j];
@@ -16,12 +17,14 @@ function search() {
           tr[i].style.display = "none";
         }
       }
-
     }
-
   }
 }
-
+//Delay in search
+function sleep(seconds) {
+  var e = new Date().getTime() + seconds * 100;
+  while (new Date().getTime() <= e) {}
+}
 // sorting ascending and descending
 function sortTable(n) {
   var table,
@@ -80,11 +83,11 @@ if (table != null) {
     for (var j = 0; j < table.rows[i].cells.length; j++) {
       var pinImg = table.rows[i].cells[j].getElementsByTagName("img")[0];
       if (pinImg) {
-        pinImg.onclick = function () {
+        pinImg.onclick = function() {
           tableText(this.parentNode);
-        }
+        };
       }
-    };
+    }
   }
 }
 
@@ -99,7 +102,7 @@ function tableText(tableCell) {
     for (var f = 0; f < df.cells.length; f++) {
       var pinImg = df.cells[f].getElementsByTagName("img")[0];
       if (pinImg) {
-        pinImg.onclick = function (e) {
+        pinImg.onclick = function(e) {
           tableText(this.parentNode);
         };
       }
